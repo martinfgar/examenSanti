@@ -1,0 +1,5 @@
+FROM node:latest
+ARG PORT
+WORKDIR /
+COPY ./apiserver.js apiserver.js
+CMD node apiserver.js ${PORT}

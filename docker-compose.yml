@@ -1,0 +1,32 @@
+services:
+  api1:
+    build:
+      dockerfile: Dockerfile.api
+      args:
+        - PORT=4000
+  api2:
+    build:
+      dockerfile: Dockerfile.api
+      args:
+        - PORT=3001
+  webserver:
+    build:
+      dockerfile: Dockerfile.webserver
+      args:
+        - PORT=3000
+    environment:
+      #En caso de usar wsl2 sin docker desktop, yo he usado el puerto 3000
+      #netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=8088 connectaddress=localhost
+      - API=http://10.10.17.191:3000/api 
+      #- API=http://10.10.17.191:8088/api
+      - AUTHOR=MARTIN
+  proxy:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx/templates
+    ports:
+      - 8088:80
+    depends_on:
+      - api1
+      - api2
+      - webserver

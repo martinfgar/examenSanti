@@ -1,0 +1,6 @@
+FROM node:latest
+ARG PORT
+WORKDIR /
+COPY ./webserver.js webserver.js
+COPY ./spa.html spa.html
+CMD node webserver.js ${PORT}
